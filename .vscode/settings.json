@@ -1,8 +1,14 @@
 {
-    "editor.formatOnSave": true,    // <-- prettierで整形
+    "eslint.workingDirectories": [ "./my-calendar" ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true  // <-- eslintでリント
     },
-    // デフォルトフォーマッタをprettierに
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "eslint.format.enable": false,
+    "editor.formatOnSave": true,  // <-- prettierで整形
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode", // フォーマッタをprettierに指定
+    },
 }

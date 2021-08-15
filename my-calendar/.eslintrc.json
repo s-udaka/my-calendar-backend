@@ -1,0 +1,27 @@
+{
+    "root": true,
+    // 適用する環境
+    "env": {
+        "es6": true,
+        "node": true,
+        "browser": true,
+        "commonjs": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        // import 文でモジュールを使用します
+        "sourceType": "module",
+        "tsconfigRootDir": "my-calendar/",
+        "project": ["./tsconfig.eslint.json"]
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "prettier"
+    ]
+}

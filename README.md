@@ -52,6 +52,11 @@
 - .env ファイルを作成し、git 管理から外す
 - ルーティング周りの実装
   - `yarn add body-parser`⇦ 非推奨って出たからいらないかも
+- AWS Cognitoを使用した認証周りの実装
+  - `yarn add aws-amplify`
+  - `yarn add dotenv`
+  - `yarn add jsonwebtoken jwks-rsa`
+  - `yarn add --dev @types/jsonwebtoken`
 
 ## 参考にした記事
 
@@ -60,3 +65,10 @@
 - Webpack の設定で参考にした
   - `https://qiita.com/isihigameKoudai/items/4b790b5b2256dec27d1f`
   - `https://qiita.com/ryokkkke/items/390647a7c26933940470`
+- リンターの設定で参考にした
+  - `https://qiita.com/yuma-ito-bd/items/cca7490fd7e300bbf169`
+  - `https://zenn.dev/ryusou/articles/nodejs-prettier-eslint2021`
+- Cognitoを使用した認証・セッション管理について参考にした
+  - `https://qiita.com/nyandora/items/2d93a6a5eb17751e502b`
+- REST CLIENTの使用について参考にした
+  - `https://qiita.com/toshi0607/items/c4440d3fbfa72eac840c`
