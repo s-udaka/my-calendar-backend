@@ -14,11 +14,11 @@ export interface SignUpResModel {
  */
 export const userCreate = async (reqBody: any): Promise<SignUpResModel> => {
   const item: SignUpInputModel = {
-    firstName: reqBody.firstName,
-    lastName: reqBody.lastName,
-    email: reqBody.email,
-    password: reqBody.password,
-    role: reqBody.role
+    firstName: reqBody.item.firstName,
+    lastName: reqBody.item.lastName,
+    email: reqBody.item.email,
+    password: reqBody.item.password,
+    role: reqBody.item.role
   }
   console.info('signUpメソッド呼び出し');
   const res = await signUp(item);
