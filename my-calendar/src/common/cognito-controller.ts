@@ -151,7 +151,7 @@ export const signOut = async (): Promise<boolean> => {
     console.info('signOut開始');
     let resFlg = false;
     try {
-        await Auth.signOut();
+        await Auth.signOut({ global: true });
         console.info('signOut終了');
         return true;
     } catch (err) {
