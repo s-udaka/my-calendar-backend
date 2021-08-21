@@ -1,7 +1,8 @@
 import express from 'express';
 import { login, LoginResModel } from '../api/login';
 import { userCreate, SignUpResModel } from '../api/userCreate';
-import { getUser } from '../api/users';
+import { getUser, GetUserResModel } from '../api/users';
+import { logout, LogoutResModel } from '../api/logout';
 
 /**
  * ログイン処理
@@ -15,6 +16,11 @@ export const loginController = async (
   return data;
 };
 
+/**
+ * 新規ユーザー生成処理
+ * @param req - リクエストデータ
+ * @returns ユーザー情報
+ */
 export const signUpController = async (
   req: express.Request,
 ): Promise<SignUpResModel> => {
@@ -22,7 +28,16 @@ export const signUpController = async (
   return data;
 }
 
-export const getUserController = async (): Promise<SignUpResModel> => {
+export const getUserController = async (): Promise<GetUserResModel> => {
   const data = await getUser();
   return data;
 }
+
+/**
+ * ログアウト処理
+ * @returns ログアウト結果
+ */
+ export const logoutController = async (): Promise<LogoutResModel> => {
+  const res = await logout();
+  return res;
+};

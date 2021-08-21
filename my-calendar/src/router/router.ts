@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { loginController, signUpController, getUserController } from '../controller/controller';
+import { loginController, signUpController, getUserController, logoutController } from '../controller/controller';
 
 // ------ ルーティングのログ出力など共通処理 ------ //
 router.all('/*', (req: express.Request, res: express.Response, next) => {
@@ -23,17 +23,20 @@ router.post('/login', (req: express.Request, res: express.Response) => {
 
 // ログアウト
 router.delete('/logout', (req: express.Request, res: express.Response) => {
-  const data = {
-    message: 'logout success: ' + req.body.userId,
-  };
-  res.json(data);
+  logoutController()
+    .then((data) => {
+      res.status(data.statusCode).json(data.message);
+    })
+    .catch(() => {
+      res.status(500).json();
+    });
 });
 
 // ユーザー作成
 router.post('/user', (req: express.Request, res: express.Response) => {
   signUpController(req)
     .then((data) => {
-      res.status(data.statusCode).json();
+      res.status(data.statusCode).json(data.message);
     })
     .catch(() => {
       res.status(500).json();
@@ -45,7 +48,7 @@ router.get('/user', (req: express.Request, res: express.Response) => {
   // console.debug(req);
   getUserController()
     .then((data) => {
-      res.status(data.statusCode).json();
+      res.status(data.statusCode).json(data.message);
     })
     .catch(() => {
       res.status(500).json();

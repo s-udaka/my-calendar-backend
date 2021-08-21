@@ -1,4 +1,7 @@
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { 
+    Auth, 
+    // Storage 
+} from 'aws-amplify';
 import jwt, { JwtHeader, SigningKeyCallback } from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
 
@@ -11,6 +14,7 @@ Amplify.configure({
     userPoolId: process.env.AWS_COGNITO_POOL_ID,
     // アプリクライアントID
     userPoolWebClientId: process.env.AWS_COGNITO_CLIENT_ID,
+    // Storage: 'sessionStorage'
   },
 });
 
