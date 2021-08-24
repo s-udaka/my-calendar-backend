@@ -1,22 +1,26 @@
-import Amplify, { 
-    Auth, 
-    // Storage 
-} from 'aws-amplify';
+const AWS = require('aws-sdk');
+// const crypto = require('crypto');
 import jwt, { JwtHeader, SigningKeyCallback } from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
 
-// Amplifyの設定
-Amplify.configure({
-  Auth: {
-    // リージョン
-    region: process.env.REGION,
-    // ユーザプールのID
-    userPoolId: process.env.AWS_COGNITO_POOL_ID,
-    // アプリクライアントID
-    userPoolWebClientId: process.env.AWS_COGNITO_CLIENT_ID,
-    // Storage: 'sessionStorage'
-  },
+const cognito = new AWS.CognitoIdentityServiceProvider({
+    // accessKeyId: process.env.AWS_ACCESS_KEY,
+    // secretAccessKey: process.env.AWS_SECRET_KEY,
+    region: process.env.REGION
 });
+
+// // Amplifyの設定
+// Amplify.configure({
+//   Auth: {
+//     // リージョン
+//     region: process.env.REGION,
+//     // ユーザプールのID
+//     userPoolId: process.env.AWS_COGNITO_POOL_ID,
+//     // アプリクライアントID
+//     userPoolWebClientId: process.env.AWS_COGNITO_CLIENT_ID,
+//     // Storage: 'sessionStorage'
+//   },
+// });
 
 const client = jwksClient({
     jwksUri: "https://cognito-idp." + process.env.REGION + ".amazonaws.com/" + process.env.AWS_COGNITO_POOL_ID + "/.well-known/jwks.json",
@@ -53,26 +57,74 @@ export interface SignUpInputModel {
  */
 export const signUp = async (item: SignUpInputModel): Promise<boolean> => {
     console.info('SignUp開始');
-    try {
-        const result = await Auth.signUp({
-            username: item.email,
-            password: item.password,
-            attributes: {
-                email: item.email,
-                'custom:firstName': item.firstName,
-                'custom:lastName': item.lastName,
-                'custom:role': item.role
+    const params = {
+        UserPoolId: process.env.AWS_COGNITO_POOL_ID, // required
+        Username: item.email, // required (ログインユーザー名)
+        ForceAliasCreation: true,
+        MessageAction: 'SUPPRESS',
+        UserAttributes: [
+            {
+                Name: 'email',
+                Value: item.email // 属性のメールアドレスを指定
             },
-        });
-        console.info(result);
+            {
+                Name: 'custom:firstName',
+                Value: item.firstName
+            },
+            {
+                Name: 'custom:lastName',
+                Value: item.lastName
+            },
+            {
+                Name: 'custom:role',
+                Value: item.role
+            }
+        ]
+    };
+    try {
+        // この時点では、アカウントのステータスは「FORCE_CHANGE_PASSWORD」
+        const result = await cognito.adminCreateUser(params).promise();
+        console.info(JSON.stringify(result, null, 4));
         console.info('SignUp終了');
-        return true;
+        // これでアカウントのステータスが「CONFIRMED」となる
+        const res = await setInitUserPassword(item.email, item.password);
+        if (res) {
+            return true;
+        } else {
+            return false;
+        }
     } catch (err) {
         console.info('catchに入った');
         console.error(err);
         return false;
     }
 };
+
+/**
+ * ユーザー作成直後にパスワードの設定をすることでユーザーの作成が完了する
+ * @param username - ユーザー名（メアド）
+ * @param password - パスワード
+ * @returns 初期パスワード設定結果 {boolean}
+ */
+const setInitUserPassword = async (username: String, password: String): Promise<boolean> => {
+    console.info('初期パスワード設定開始');
+    const params = {
+        UserPoolId: process.env.AWS_COGNITO_POOL_ID, // required
+        Username: username, // required
+        Password: password, // required
+        Permanent: true
+    };
+    try {
+        const result = await cognito.adminSetUserPassword(params).promise();
+        console.info(JSON.stringify(result, null, 4));
+        console.info('初期パスワード設定終了');
+        return true;
+    } catch (err) {
+        console.info('catchに入った');
+        console.error(err);
+        return false;
+    }
+}
 
 // /**
 //  * 認証コード検証
@@ -116,9 +168,20 @@ export const signIn = async (
   password: string
 ): Promise<UserModel | undefined> => {
     console.info('signIn開始');
+    // SECRET_HASHは、ユーザー名とクライアントIDを結合し、ハッシュ化したものを設定
+    const params = {
+        UserPoolId: process.env.AWS_COGNITO_POOL_ID, // required
+        ClientId: process.env.AWS_COGNITO_CLIENT_ID, // required
+        AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
+        AuthParameters: {
+            USERNAME: userName,
+            PASSWORD: password,
+            // SECRET_HASH: crypto.createHmac('sha256', process.env.AWS_COGNITO_CLIENT_ID).update('symfoware' + process.env.AWS_COGNITO_CLIENT_ID).digest('base64')
+        }
+    };
     let resData: UserModel | undefined;
     try {
-        const user = await Auth.signIn(userName, password);
+        const user = await cognito.adminInitiateAuth(params);
         console.info(user);
         console.info('SignIn終了');
         resData = {
@@ -128,13 +191,7 @@ export const signIn = async (
             password: 'password',
             role: 'role'
         };
-        jwtVerify(user.signInUserSession.idToken.jwtToken);
-        // if (!user.signInUserSession) {
-        //     this.setState({ user, showConfirmation: true })
-        // } else {
-        //     updateCurrentUser(user)
-        //     history.push('/profile')
-        // }
+        // jwtVerify(user.signInUserSession.idToken.jwtToken);
         return resData;
     } catch (err) {
         console.info('catchに入った');
@@ -149,9 +206,9 @@ export const signIn = async (
  */
 export const signOut = async (): Promise<boolean> => {
     console.info('signOut開始');
-    let resFlg = false;
+    // let resFlg = false;
     try {
-        await Auth.signOut({ global: true });
+        // await Auth.signOut({ global: true });
         console.info('signOut終了');
         return true;
     } catch (err) {
@@ -167,19 +224,19 @@ export const signOut = async (): Promise<boolean> => {
 export const getUserData = async (): Promise<boolean> => {
     try {
         // const user = await Auth.currentAuthenticatedUser();
-        const user = await Auth.currentUserInfo();
-        const user2 = await Auth.currentUserPoolUser();
-        const user3 = await Auth.currentSession();
-        const user4 = await Auth.userSession(user2);
-        console.info('現在ログインしているユーザー情報？');
-        console.info('currentUserInfo: ');
-        console.info(user);
-        console.info('currentUserPoolUser: ');
-        console.info(user2);
-        console.info('currentSession: ');
-        console.info(user3);
-        console.info('userSession: ');
-        console.info(user4);
+        // const user = await Auth.currentUserInfo();
+        // const user2 = await Auth.currentUserPoolUser();
+        // const user3 = await Auth.currentSession();
+        // const user4 = await Auth.userSession(user2);
+        // console.info('現在ログインしているユーザー情報？');
+        // console.info('currentUserInfo: ');
+        // console.info(user);
+        // console.info('currentUserPoolUser: ');
+        // console.info(user2);
+        // console.info('currentSession: ');
+        // console.info(user3);
+        // console.info('userSession: ');
+        // console.info(user4);
         return true;
     } catch (err) {
         console.info('catchに入った');

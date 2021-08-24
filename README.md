@@ -57,6 +57,13 @@
   - `yarn add dotenv`
   - `yarn add jsonwebtoken jwks-rsa`
   - `yarn add --dev @types/jsonwebtoken`
+- フロント側のCognito実装方法を使用してしまったため、`aws-sdk`を使った方法に変更した
+  - `aws-amplify`を使ったCognito認証方法を削除
+    - `yarn remove aws-amplify`を実行
+  - `yarn add aws-sdk`を実行
+  - 記事を参考にaws-sdkを使ったCognito認証を実装
+  - IAMユーザーに`AmazonCognitoPowerUser`のポリシーをアタッチした
+    - aws-sdkからCognitoを操作するため
 
 ## 参考にした記事
 
@@ -72,3 +79,5 @@
   - `https://qiita.com/nyandora/items/2d93a6a5eb17751e502b`
 - REST CLIENTの使用について参考にした
   - `https://qiita.com/toshi0607/items/c4440d3fbfa72eac840c`
+- サーバーサイドでのCognito認証周りの実装について参考にした
+  - `https://symfoware.blog.fc2.com/blog-entry-2495.html`

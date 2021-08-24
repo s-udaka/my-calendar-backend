@@ -26,7 +26,7 @@ export const userCreate = async (reqBody: any): Promise<SignUpResModel> => {
   if (res) {
     return {
       statusCode: 200,
-      message: '',
+      message: 'signUp success',
     };
   } else {
     return {
