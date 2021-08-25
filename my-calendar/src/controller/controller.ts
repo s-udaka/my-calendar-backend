@@ -28,8 +28,10 @@ export const signUpController = async (
   return data;
 }
 
-export const getUserController = async (): Promise<GetUserResModel> => {
-  const data = await getUser();
+export const getUserController = async (
+  req: express.Request,
+): Promise<GetUserResModel> => {
+  const data = await getUser(req.params.userId);
   return data;
 }
 
@@ -37,7 +39,9 @@ export const getUserController = async (): Promise<GetUserResModel> => {
  * ログアウト処理
  * @returns ログアウト結果
  */
- export const logoutController = async (): Promise<LogoutResModel> => {
-  const res = await logout();
+ export const logoutController = async (
+  req: express.Request,
+ ): Promise<LogoutResModel> => {
+  const res = await logout(req.body);
   return res;
 };

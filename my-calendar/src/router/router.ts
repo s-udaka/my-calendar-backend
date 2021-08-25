@@ -23,7 +23,7 @@ router.post('/login', (req: express.Request, res: express.Response) => {
 
 // ログアウト
 router.delete('/logout', (req: express.Request, res: express.Response) => {
-  logoutController()
+  logoutController(req)
     .then((data) => {
       res.status(data.statusCode).json(data.message);
     })
@@ -44,9 +44,9 @@ router.post('/user', (req: express.Request, res: express.Response) => {
 });
 
 // ログイン中ユーザー確認
-router.get('/user', (req: express.Request, res: express.Response) => {
+router.get('/user/:userId', (req: express.Request, res: express.Response) => {
   // console.debug(req);
-  getUserController()
+  getUserController(req)
     .then((data) => {
       res.status(data.statusCode).json(data.message);
     })

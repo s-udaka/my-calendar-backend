@@ -181,8 +181,9 @@ export const signIn = async (
     };
     let resData: UserModel | undefined;
     try {
-        const user = await cognito.adminInitiateAuth(params);
-        console.info(user);
+        const user = await cognito.adminInitiateAuth(params).promise();
+        console.info(JSON.stringify(user, null, 4));
+        // console.info(JSON.stringify(user.AuthenticationResult.IdToken, null, 4));
         console.info('SignIn終了');
         resData = {
             firstName: 'firstName',
@@ -191,7 +192,7 @@ export const signIn = async (
             password: 'password',
             role: 'role'
         };
-        // jwtVerify(user.signInUserSession.idToken.jwtToken);
+        jwtVerify(user.AuthenticationResult.IdToken);
         return resData;
     } catch (err) {
         console.info('catchに入った');
@@ -204,11 +205,17 @@ export const signIn = async (
  * ログアウト
  * @returns ログアウト結果 {boolean}
  */
-export const signOut = async (): Promise<boolean> => {
+export const signOut = async (userId: String): Promise<boolean> => {
     console.info('signOut開始');
+    const params = {
+        UserPoolId: process.env.AWS_COGNITO_POOL_ID, // required
+        Username: userId,
+    };
     // let resFlg = false;
     try {
         // await Auth.signOut({ global: true });
+        const result = await cognito.adminUserGlobalSignOut(params).promise();
+        console.info(JSON.stringify(result, null, 4));
         console.info('signOut終了');
         return true;
     } catch (err) {
@@ -221,22 +228,16 @@ export const signOut = async (): Promise<boolean> => {
 /**
  * ログイン中のユーザー情報が取れる？
  */
-export const getUserData = async (): Promise<boolean> => {
+export const getUserData = async (userId: String): Promise<boolean> => {
+    console.info('getUserData開始');
     try {
-        // const user = await Auth.currentAuthenticatedUser();
-        // const user = await Auth.currentUserInfo();
-        // const user2 = await Auth.currentUserPoolUser();
-        // const user3 = await Auth.currentSession();
-        // const user4 = await Auth.userSession(user2);
-        // console.info('現在ログインしているユーザー情報？');
-        // console.info('currentUserInfo: ');
-        // console.info(user);
-        // console.info('currentUserPoolUser: ');
-        // console.info(user2);
-        // console.info('currentSession: ');
-        // console.info(user3);
-        // console.info('userSession: ');
-        // console.info(user4);
+        const params = {
+            UserPoolId: process.env.AWS_COGNITO_POOL_ID, // required
+            Username: userId // required
+        };
+        const user = await cognito.adminGetUser(params).promise();
+        console.info(JSON.stringify(user, null, 4));
+        console.info('getUserData終了');
         return true;
     } catch (err) {
         console.info('catchに入った');

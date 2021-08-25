@@ -9,9 +9,10 @@ export interface LogoutResModel {
  * ログアウト処理（ローカルストレージに保存されている情報を削除する）
  * @returns ログアウト結果
  */
-export const logout = async (): Promise<LogoutResModel> => {
+export const logout = async (reqBody: any): Promise<LogoutResModel> => {
   console.info('logoutメソッド呼び出し');
-  const res = await signOut();
+  console.info(reqBody);
+  const res = await signOut(reqBody.userId);
   console.info('logoutメソッド終了');
   if (res) {
     return {
