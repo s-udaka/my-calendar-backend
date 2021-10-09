@@ -64,6 +64,9 @@
   - 記事を参考にaws-sdkを使ったCognito認証を実装
   - IAMユーザーに`AmazonCognitoPowerUser`のポリシーをアタッチした
     - aws-sdkからCognitoを操作するため
+- redisを使用したセッション管理を実装
+  - `yarn add express-session cookie-parser redis connect-redis`
+  - `yarn add --dev @types/cookie-parser @types/express-session @types/redis`
 
 ## 参考にした記事
 
@@ -81,3 +84,5 @@
   - `https://qiita.com/toshi0607/items/c4440d3fbfa72eac840c`
 - サーバーサイドでのCognito認証周りの実装について参考にした
   - `https://symfoware.blog.fc2.com/blog-entry-2495.html`
+- expressとredisによるセッション管理の実装で参考にした
+  - `https://www.wakuwakubank.com/posts/738-nodejs-express-session/`

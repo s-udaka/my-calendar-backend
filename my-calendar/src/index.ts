@@ -1,14 +1,37 @@
 import express from "express";
-// import * as bodyParser from "body-parser";
-const app: express.Express = express();
-const router = express.Router();
+const app = express();
+
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import redis from "redis";
+
+const RedisStore = require("connect-redis")(session);
+const redisClient = redis.createClient();
+
+app.use(cookieParser());
+app.use(
+  session({
+    name: "qid",
+    secret: "secret_key",
+    resave: false,
+    saveUninitialized: false,
+    store: new RedisStore({ client: redisClient }),
+    // store: new RedisStore({
+    //   host: "localhost",
+    //   port: 6379,
+    //   prefix: "sid:",
+    // }),
+    cookie: { httpOnly: true, secure: false, maxAge: 1000 * 60 * 30 },
+  })
+);
+
 app.use(express.json());
 // app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(bodyParser.urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
 }
 
 //CROS対応（というか完全無防備：本番環境ではだめ絶対）
@@ -48,9 +71,9 @@ app.use("/", require("./router/router.ts"));
 app.use((req, res) => {
   res.status(404);
   const data = {
-    "url": req.url,
-    "message": 'Not Found'
-  }
+    url: req.url,
+    message: "Not Found",
+  };
   res.json(data);
 });
 

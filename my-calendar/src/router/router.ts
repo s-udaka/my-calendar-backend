@@ -1,9 +1,14 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
-import { loginController, signUpController, getUserController, logoutController } from '../controller/controller';
+import {
+  loginController,
+  signUpController,
+  getUserController,
+  logoutController,
+} from "../controller/controller";
 
 // ------ ルーティングのログ出力など共通処理 ------ //
-router.all('/*', (req: express.Request, res: express.Response, next) => {
+router.all("/*", (req: express.Request, res: express.Response, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
@@ -11,7 +16,7 @@ router.all('/*', (req: express.Request, res: express.Response, next) => {
 // -------- 認証チェックが不要なルーティング設定 ここから -------- //
 
 // ログイン
-router.post('/login', (req: express.Request, res: express.Response) => {
+router.post("/login", (req: express.Request, res: express.Response) => {
   loginController(req)
     .then((data) => {
       res.status(data.statusCode).json(data.userData);
@@ -22,7 +27,7 @@ router.post('/login', (req: express.Request, res: express.Response) => {
 });
 
 // ログアウト
-router.delete('/logout', (req: express.Request, res: express.Response) => {
+router.delete("/logout", (req: express.Request, res: express.Response) => {
   logoutController(req)
     .then((data) => {
       res.status(data.statusCode).json(data.message);
@@ -33,7 +38,7 @@ router.delete('/logout', (req: express.Request, res: express.Response) => {
 });
 
 // ユーザー作成
-router.post('/user', (req: express.Request, res: express.Response) => {
+router.post("/user", (req: express.Request, res: express.Response) => {
   signUpController(req)
     .then((data) => {
       res.status(data.statusCode).json(data.message);
@@ -44,7 +49,7 @@ router.post('/user', (req: express.Request, res: express.Response) => {
 });
 
 // ログイン中ユーザー確認
-router.get('/user/:userId', (req: express.Request, res: express.Response) => {
+router.get("/user/:userId", (req: express.Request, res: express.Response) => {
   // console.debug(req);
   getUserController(req)
     .then((data) => {
@@ -88,13 +93,13 @@ router.use((req: express.Request, res: express.Response, next) => {
 // -------- 認証チェックが必要なルーティング設定 -------- //
 
 router.get(
-  '/calendar/:userId',
+  "/calendar/:userId",
   (req: express.Request, res: express.Response) => {
     const data = {
-      message: 'get calendar success: ' + req.params.userId,
+      message: "get calendar success: " + req.params.userId,
     };
     res.json(data);
-  },
+  }
 );
 
 // // 「/user/{ID}」にマッチする場合の処理
