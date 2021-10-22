@@ -66,7 +66,9 @@
     - aws-sdk から Cognito を操作するため
 - redis を使用したセッション管理を実装
   - `yarn add express-session cookie-parser redis connect-redis`
-  - `yarn add --dev @types/cookie-parser @types/express-session @types/redis`
+  - `yarn add --dev @types/cookie-parser @types/express-session @types/redis @types/connect-redis`
+  - express-session の SessionData の型定義を拡張しないといけなかった
+    - `https://www.fixes.pub/program/546851.html`
 
 ## 参考にした記事
 
@@ -86,3 +88,4 @@
   - `https://symfoware.blog.fc2.com/blog-entry-2495.html`
 - express と redis によるセッション管理の実装で参考にした
   - `https://www.wakuwakubank.com/posts/738-nodejs-express-session/`
+  - `https://qiita.com/theFirstPenguin/items/177ca0d09c02b0a16c9e`

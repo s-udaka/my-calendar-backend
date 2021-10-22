@@ -13,10 +13,11 @@ export const loginController = async (
   req: express.Request,
 ): Promise<LoginResModel> => {
   const data = await login(req.body.userId, req.body.password);
-  // if (data.userData) {
-  //   // ログイン成功時にsessionに値をセット
-  //   req.session.id = data.userData?.email;
-  // }
+  // req.session.
+  if (data.userData) {
+    // ログイン成功時にsessionに値をセット
+    req.session.userId = data.userData?.email;
+  }
   return data;
 };
 

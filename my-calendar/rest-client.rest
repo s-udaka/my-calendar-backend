@@ -4,7 +4,7 @@ content-type: application/json
 
 {
     "userId": "udasho19work@gmail.com",
-    "password": "Sho-1119s"
+    "password": "sho1119s"
 }
 
 ###

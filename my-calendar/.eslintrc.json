@@ -12,7 +12,7 @@
         "ecmaVersion": 2020,
         // import 文でモジュールを使用します
         "sourceType": "module",
-        "tsconfigRootDir": "my-calendar/",
+        // "tsconfigRootDir": "my-calendar/",
         "project": ["./tsconfig.eslint.json"]
     },
     "plugins": [
