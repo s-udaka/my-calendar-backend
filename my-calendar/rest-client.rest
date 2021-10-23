@@ -7,4 +7,14 @@ content-type: application/json
     "password": "sho1119s"
 }
 
-###
+### ユーザー情報取得
+GET http://localhost:4000/user/udasho19work@gmail.com HTTP/1.1
+content-type: application/json
+
+### ログアウト
+DELETE http://localhost:4000/logout HTTP/1.1
+content-type: application/json
+
+{
+    "userId": "udasho19work@gmail.com",
+}

@@ -112,8 +112,8 @@ export const signUp = async (item: SignUpInputModel): Promise<boolean> => {
  * @returns 初期パスワード設定結果 {boolean}
  */
 const setInitUserPassword = async (
-  username: String,
-  password: String,
+  username: string,
+  password: string,
 ): Promise<boolean> => {
   console.info('初期パスワード設定開始');
   const params = {
@@ -213,7 +213,7 @@ export const signIn = async (
  * ログアウト
  * @returns ログアウト結果 {boolean}
  */
-export const signOut = async (userId: String): Promise<boolean> => {
+export const signOut = async (userId: string): Promise<boolean> => {
   console.info('signOut開始');
   const params = {
     UserPoolId: process.env.AWS_COGNITO_POOL_ID, // required
@@ -236,7 +236,7 @@ export const signOut = async (userId: String): Promise<boolean> => {
 /**
  * ログイン中のユーザー情報が取れる？
  */
-export const getUserData = async (userId: String): Promise<boolean> => {
+export const getUserData = async (userId: string): Promise<boolean> => {
   console.info('getUserData開始');
   try {
     const params = {

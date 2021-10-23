@@ -56,12 +56,12 @@ app.use(
   },
 );
 
-// 全てのメソッドのミドルウェアメソッドが必要な場合
-app.use('/', function (req: express.Request, res, next: express.NextFunction) {
-  console.log('req.session.id: ' + req.session.id);
-  // res.send('Any request')
-  next();
-});
+// // 全てのメソッドのミドルウェアメソッドが必要な場合
+// app.use('/', function (req: express.Request, res, next: express.NextFunction) {
+//   console.log('req.session.id: ' + req.session.id);
+//   // res.send('Any request')
+//   next();
+// });
 
 // ------ ルーティング ------ //
 app.use('/', require('./router/router.ts'));

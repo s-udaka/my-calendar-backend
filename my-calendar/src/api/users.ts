@@ -5,7 +5,7 @@ export interface GetUserResModel {
   message: string;
 }
 
-export const getUser = async (userId: String): Promise<GetUserResModel> => {
+export const getUser = async (userId: string): Promise<GetUserResModel> => {
   console.info('getUserメソッド呼び出し');
   const res = await getUserData(userId);
   console.info('getUserメソッド終了');

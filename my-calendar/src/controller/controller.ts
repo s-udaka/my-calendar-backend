@@ -16,6 +16,7 @@ export const loginController = async (
   // req.session.
   if (data.userData) {
     // ログイン成功時にsessionに値をセット
+    // このタイミングでredisにも登録される
     req.session.userId = data.userData?.email;
   }
   return data;
@@ -47,6 +48,10 @@ export const getUserController = async (
 export const logoutController = async (
   req: express.Request,
 ): Promise<LogoutResModel> => {
-  const res = await logout(req.body);
+  const res = await logout(req.body.userId);
+  // session情報を破棄、redisからも削除される
+  req.session.destroy((err) => {
+    console.log(err);
+  });
   return res;
 };
