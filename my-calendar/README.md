@@ -69,6 +69,9 @@
   - `yarn add --dev @types/cookie-parser @types/express-session @types/redis @types/connect-redis`
   - express-session の SessionData の型定義を拡張しないといけなかった
     - `https://www.fixes.pub/program/546851.html`
+- AWS Aurora と接続する
+  - `yarn add pg`
+  - `yarn add --dev @types/pg`
 
 ## 参考にした記事
 

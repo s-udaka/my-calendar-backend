@@ -3,6 +3,7 @@ import { login, LoginResModel } from '../api/login';
 import { userCreate, SignUpResModel } from '../api/userCreate';
 import { getUser, GetUserResModel } from '../api/users';
 import { logout, LogoutResModel } from '../api/logout';
+import { getAurora, AuroraModel } from '../api/auroraTest';
 
 /**
  * ログイン処理
@@ -54,4 +55,13 @@ export const logoutController = async (
     console.log(err);
   });
   return res;
+};
+
+/**
+ * Auroraテスト
+ * @returns Auroraデータ
+ */
+export const auroraController = async (): Promise<AuroraModel> => {
+  const data = await getAurora();
+  return data;
 };

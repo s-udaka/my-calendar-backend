@@ -5,6 +5,7 @@ import {
   signUpController,
   getUserController,
   logoutController,
+  auroraController,
 } from '../controller/controller';
 
 // ------ ルーティングのログ出力など共通処理 ------ //
@@ -47,6 +48,21 @@ router.post('/user', (req: express.Request, res: express.Response) => {
   signUpController(req)
     .then((data) => {
       res.status(data.statusCode).json(data.message);
+    })
+    .catch(() => {
+      res.status(500).json();
+    });
+});
+
+// auroraテスト
+router.get('/aurora/test', (req: express.Request, res: express.Response) => {
+  auroraController()
+    .then((data) => {
+      if (data.data) {
+        res.status(data.statusCode).json(data.data);
+      } else {
+        res.status(data.statusCode).json(data.message);
+      }
     })
     .catch(() => {
       res.status(500).json();
