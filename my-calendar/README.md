@@ -92,3 +92,6 @@
 - express と redis によるセッション管理の実装で参考にした
   - `https://www.wakuwakubank.com/posts/738-nodejs-express-session/`
   - `https://qiita.com/theFirstPenguin/items/177ca0d09c02b0a16c9e`
+- Aurora(postgres)との接続について
+  - `https://qiita.com/honda28/items/30151aeba8217d46e9bf`
+  - `https://qiita.com/yusuke-ka/items/448843020c0406363ba5`
